@@ -26,6 +26,15 @@
 #head(mu)
 
 #mu<-0
+#' Plot density
+#'
+#' @param df Data frame
+#' @param split
+#'
+#' @return
+#' @export
+#'
+#' @examples
 plot2density <- function(df, split) {
 
 # Histogram with density plot
