@@ -28,15 +28,23 @@
 #mu<-0
 #' Plot density
 #'
-#' @param df Data frame
-#' @param split
+#' @param df Two factor data frame each 200 from rnorm(m_1,1).
 #'
-#' @return
+#' @return Density plot over histogram
 #' @export
 #'
-#' @examples
-plot2density <- function(df, split) {
-
+#' @examples  set.seed(1)
+#' library(ggplot2)
+#' m_1<-1
+#' m_2<-3
+#' df <- data.frame(
+#' sex=factor(rep(c("F", "M"), each=200)),
+#'  weight=round(c(rnorm(200, mean=m_1, sd=1),
+#'                 rnorm(200, mean=m_2, sd=1)))
+#' )
+#'plot2density(df)
+plot2density <- function(df) {
+weight<-..density..<-sex<-grp.mean<-0
 # Histogram with density plot
   ggplot2::ggplot(df, ggplot2::aes(x=weight)) +
     ggplot2::geom_histogram(ggplot2::aes(y=..density..), colour="black", fill="white")+

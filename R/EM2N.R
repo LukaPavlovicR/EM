@@ -1,19 +1,31 @@
 #p=0.7, m_1=-1, m_2=3
 
+#' Using EM algorithm
+#'
+#' @param p Probability
+#' @param m_1 Expected value of first
+#' @param m_2 Expected value of second
+#'
+#' @return Iterations towards convergence
+#' @export
+#'
+#' @examples
+#' EM2N(0.7, -1, 3)
+#'
 EM2N <- function(p,m_1,m_2){
 
 
   dmix <- function(x, mi1, mi2) {
-    (1-p)* dnorm(x, mi1, 1) +
-      p * dnorm(x, mi2, 1)
+    (1-p)* stats::dnorm(x, mi1, 1) +
+      p * stats::dnorm(x, mi2, 1)
   }
   # Uzmemo konkretne vrednosti m_1 = -1 i m_2 = 3
   # curve(dmix(x, -1, 3), xlim = c(-10, 10))
 
   rmix <- function(n) {
-    u <- runif(n)
-    (u < 1-p) * rnorm(n, m_1) +
-      (u >= 1-p) * rnorm(n, m_2)
+    u <- stats::runif(n)
+    (u < 1-p) * stats::rnorm(n, m_1) +
+      (u >= 1-p) * stats::rnorm(n, m_2)
   }
 
 
@@ -21,20 +33,20 @@ EM2N <- function(p,m_1,m_2){
 
   # za p smo uzeli 0.7
   expectation <- function(mi1, mi2, xs) {
-    p*dnorm(xs, mi2) /
-      ((1-p)*dnorm(xs, mi1) +
-         p*dnorm(xs, mi2))
+    p*stats::dnorm(xs, mi2) /
+      ((1-p)*stats::dnorm(xs, mi1) +
+         p*stats::dnorm(xs, mi2))
   }
 
   # logaritam verodostojnosti
   logLxw <- function(mi1, mi2, xs, ws) {
-    sum((1-ws)*log(dnorm(xs, mi1)) +
-          ws*log(dnorm(xs, mi2)))
+    sum((1-ws)*log(stats::dnorm(xs, mi1)) +
+          ws*log(stats::dnorm(xs, mi2)))
   }
 
   # trazimo argmax(L) tako sto nadjemo argmin(-L) pomocu funkcije nlm
   maximization <- function(Ew, xs, mi_0) {
-    nlm(function(mi) -logLxw(mi[1], mi[2], xs, Ew), mi_0)$estimate
+    stats::nlm(function(mi) -logLxw(mi[1], mi[2], xs, Ew), mi_0)$estimate
   }
 
   EM_estimate_mix <- function(mi_0, xs, tol=1e-6, maxiter=100) {
